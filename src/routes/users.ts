@@ -1,7 +1,20 @@
-const router = require('express').Router();
+import { Router } from 'express';
+import { Segments } from 'celebrate';
 
-const { getUsers } = require('../controllers/users');
+import userController from '../controllers/users';
+import validator from '../middlewares/validatior';
+import { user } from '../models/user';
+
+const { getUsers, getUser, createUser } = userController;
+
+const router = Router();
 
 router.get('/', getUsers);
+router.get('/:userId', getUser);
+router.post(
+  '/',
+  validator(Segments.BODY, user.validationSchema.create),
+  createUser,
+);
 
-module.exports = router;
+export default router;

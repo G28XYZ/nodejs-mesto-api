@@ -1,16 +1,21 @@
-const express = require('express');
-const mongoose = require('mongoose');
-
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
-
-const {
+import express from 'express';
+import mongoose from 'mongoose';
+import { errors } from 'celebrate';
+import {
   DEFAULT_BASE_PATH,
   DEFAULT_MONGO_DB_NAME,
   DEFAULT_MONGO_DB_PATH,
   DEFAULT_PORT,
-} = require('./src/utils/constants');
+} from './src/utils/constants';
+
+import cardRouter from './src/routes/cards';
+import userRouter from './src/routes/users';
+import handleError from './src/errors/error-handler';
+import NotFoundError from './src/errors/not-found-error';
+
+if (process.env.NODE_ENV !== 'production') {
+  import('dotenv').then((value) => value.config());
+}
 
 const {
   PORT = DEFAULT_PORT,
@@ -19,7 +24,19 @@ const {
 } = process.env;
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 mongoose.connect(DATABASE);
+
+app.use('/users', userRouter);
+app.use('/cards', cardRouter);
+
+app.all('*', (req, res, next) => next(new NotFoundError()));
+
+app.use(errors());
+app.use(handleError);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
