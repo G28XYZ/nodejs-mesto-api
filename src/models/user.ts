@@ -12,6 +12,7 @@ class UserModelSettings<T extends IUser> implements TModelSettings<T> {
   nameModel = 'user';
 
   validationSchema = {
+    /** схема для валидации при создании пользователя */
     create: {
       name: Joi.string()
         .min(2)
@@ -19,7 +20,12 @@ class UserModelSettings<T extends IUser> implements TModelSettings<T> {
         .max(30)
         .rule({ message: ERROR_MESSAGES.name })
         .required(),
-      about: Joi.string().min(2).max(30).required(),
+      about: Joi.string()
+        .min(2)
+        .rule({ message: ERROR_MESSAGES.about })
+        .max(30)
+        .rule({ message: ERROR_MESSAGES.about })
+        .required(),
       avatar: Joi.string()
         .required()
         // uri некорректно валидирует ссылку, поэтому вместо нее custom с методом из validator

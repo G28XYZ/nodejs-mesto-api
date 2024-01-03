@@ -4,7 +4,11 @@ import mongoose, { model, Schema } from 'mongoose';
 
 export type TController = Record<
   string,
-  (req: Request, res: Response, next: NextFunction) => Promise<any> | any
+  (
+    req: Request & Partial<{ user: { _id: string } }>,
+    res: Response,
+    next: NextFunction,
+  ) => Promise<any> | any
 >;
 /** тип для параметров контроллера */
 export type TControllerParameters = Parameters<TController[string]>;

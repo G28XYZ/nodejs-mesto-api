@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { errors } from 'celebrate';
+
 import {
   DEFAULT_BASE_PATH,
   DEFAULT_MONGO_DB_NAME,
@@ -12,6 +13,7 @@ import cardRouter from './src/routes/cards';
 import userRouter from './src/routes/users';
 import handleError from './src/errors/error-handler';
 import NotFoundError from './src/errors/not-found-error';
+import { TControllerParameters } from './src/utils/types';
 
 if (process.env.NODE_ENV !== 'production') {
   import('dotenv').then((value) => value.config());
@@ -29,6 +31,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(DATABASE);
+
+app.use((...[req, _, next]: TControllerParameters) => {
+  req.user = {
+    _id: '659581da16f52c86a1e4ab25',
+  };
+  next();
+});
 
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);

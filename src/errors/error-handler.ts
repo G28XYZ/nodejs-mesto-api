@@ -1,4 +1,5 @@
 import { STATUS_CODES } from 'http';
+
 import { HTTP_CODES, TErrorHandler } from '../utils/types';
 
 const handleError: TErrorHandler = (err, _, res) => {
