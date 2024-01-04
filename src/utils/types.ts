@@ -1,3 +1,4 @@
+import { Joi } from 'celebrate';
 import { NextFunction, Request, Response } from 'express';
 import mongoose, { model, Schema } from 'mongoose';
 
@@ -41,7 +42,7 @@ export type TModelSettings<T> = {
   /** наименование модели */
   nameModel: string;
   /** схема валидации */
-  validationSchema: Record<string, any>;
+  validationSchema: Record<string, Joi.PartialSchemaMap<T>>;
   /** схема модели */
   schema: Schema<T>;
   /** модель */
@@ -57,8 +58,9 @@ export enum ERROR_MESSAGES {
   CARD_LINK = 'Некорректный адрес ссылки для карточки',
   INVALID_CARD = 'Некорректные данные при создании карточки',
   DELETE_ANOTHER_CARD = 'Попытка удалить чужую карточку',
-  NOT_FOUND_CARD = 'Карточки не существует',
+  NOT_FOUND_CARD = 'Карточка не найдена',
   INVALID_ID_CARD = 'Некорректный идентификатор карточки',
+  NOT_FOUND_USER = 'Пользователь не найден',
 }
 
 /**

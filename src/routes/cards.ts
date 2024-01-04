@@ -5,7 +5,14 @@ import cardController from '../controllers/cards';
 import validator from '../middlewares/validator';
 import { card } from '../models/card';
 
-const { getCards, createCard, deleteCard } = cardController;
+// prettier-ignore
+const {
+  getCards,
+  createCard,
+  deleteCard,
+  likeCard,
+  dislikeCard,
+} = cardController;
 
 const router = Router();
 
@@ -16,5 +23,7 @@ router.post(
   createCard,
 );
 router.delete('/:cardId', deleteCard);
+router.put('/:cardId/likes', likeCard);
+router.delete('/:cardId/likes', dislikeCard);
 
 export default router;

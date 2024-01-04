@@ -22,28 +22,56 @@ export default class {
   /** получить массив всех карточек */
   @catchError()
   static async getCards(...[_, res]: TControllerParameters) {
-    res.send(await Card.find());
+    return res.send(await Card.find());
   }
 
   /** создать карточку */
   @catchError(new ValidationError(INVALID_CARD))
   static async createCard(...[req, res]: TControllerParameters) {
     const { name, link } = req.body;
-    const owner = req?.user?._id;
+    const owner = req.user?._id;
     const card = await Card.create({ name, link, owner });
-    res.status(HTTP_CODES.CREATED_201).send(card);
+    return res.status(HTTP_CODES.CREATED_201).send(card);
   }
 
   /** удалить карточку */
-  @catchError(INVALID_ID_CARD)
+  @catchError(new ValidationError(INVALID_ID_CARD))
   static async deleteCard(...[req, res, next]: TControllerParameters) {
     const card = await Card.findById(req.params.cardId);
 
     if (!card) return next(new NotFoundError(NOT_FOUND_CARD));
 
-    if (req?.user?._id === card.owner.toString()) {
+    if (req.user?._id === card.owner.toString()) {
       return res.send(await Card.findByIdAndDelete(req.params.cardId));
     }
     return next(new ForbiddenError(DELETE_ANOTHER_CARD));
+  }
+
+  /** поставить лайк карточке */
+  @catchError(new ValidationError(INVALID_ID_CARD))
+  static async likeCard(...[req, res, next]: TControllerParameters) {
+    const card = await Card.findByIdAndUpdate(
+      req.params.cardId,
+      { $addToSet: { likes: req.user?._id } },
+      { new: true },
+    );
+
+    if (!card) return next(new NotFoundError(NOT_FOUND_CARD));
+
+    return res.send(card);
+  }
+
+  /** удалить лайк */
+  @catchError(new ValidationError(INVALID_ID_CARD))
+  static async dislikeCard(...[req, res, next]: TControllerParameters) {
+    const card = await Card.findByIdAndUpdate(
+      req.params.cardId,
+      { $pull: { likes: req.user?._id } },
+      { new: true },
+    );
+
+    if (!card) return next(new NotFoundError(NOT_FOUND_CARD));
+
+    return res.send(card);
   }
 }
