@@ -12,7 +12,7 @@ import NotFoundError from '../errors/not-found-error';
 const { INTERNAL_SERVER_ERROR_500 } = HTTP_CODES;
 /** декоратор для перехвата ошибок в контроллерах */
 export default function catchError<T extends Error>(
-  error?: string | T,
+  error?: T,
 ): TDecoratorMethod {
   return (_, __, descriptor) => {
     const originalMethod = descriptor.value;
@@ -25,11 +25,9 @@ export default function catchError<T extends Error>(
       try {
         result = await originalMethod.apply(this, args);
       } catch (e: any) {
-        if (typeof error === 'object') return next(error);
+        if (error) return next(error);
 
         if (e?.name in errors) return next(new errors[e.name as string](error));
-
-        if (error) return next(error);
 
         const message = e?.message || STATUS_CODES[INTERNAL_SERVER_ERROR_500];
         return next(new NotFoundError(message));

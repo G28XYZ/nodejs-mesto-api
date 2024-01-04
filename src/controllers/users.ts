@@ -1,5 +1,3 @@
-import { STATUS_CODES } from 'http';
-
 import {
   ERROR_MESSAGES,
   HTTP_CODES,
@@ -9,7 +7,7 @@ import User from '../models/user';
 import catchError from '../utils/decorators';
 import NotFoundError from '../errors/not-found-error';
 
-const { NOT_FOUND_404, CREATED_201 } = HTTP_CODES;
+const { CREATED_201 } = HTTP_CODES;
 
 /** контроллер для {@link User} */
 export default class {
@@ -20,7 +18,7 @@ export default class {
   }
 
   /** получить пользователя по id */
-  @catchError(`${STATUS_CODES[NOT_FOUND_404]} user`)
+  @catchError(new NotFoundError(ERROR_MESSAGES.NOT_FOUND_USER))
   static async getUser(...[req, res]: TControllerParameters) {
     return res.send(await User.findById(req.params.userId));
   }

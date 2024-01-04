@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-mesto-project",
+  "name": "nodejs-mesto-api",
   "version": "0.0.7",
   "description": "бэкенд для сервиса Место",
   "main": "app.ts",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/G28XYZ/nodejs-mesto-project.git"
+    "url": "git+https://github.com/G28XYZ/nodejs-mesto-api.git"
   },
   "author": "Aleksandr Kucherenko",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/G28XYZ/nodejs-mesto-project/issues"
+    "url": "https://github.com/G28XYZ/nodejs-mesto-api/issues"
   },
-  "homepage": "https://github.com/G28XYZ/nodejs-mesto-project#readme",
+  "homepage": "https://github.com/G28XYZ/nodejs-mesto-api#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "celebrate": "^15.0.3",
