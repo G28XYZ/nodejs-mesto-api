@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 import { Joi } from 'celebrate';
 
-import { IUser, TModelSettings } from '../utils/types';
-import { ERROR_MESSAGES } from '../utils/constants';
+import { ERROR_MESSAGES, IUser, TModelSettings } from '../utils/types';
 import validationURL from '../utils/validation-url';
 
 /**
  * модель настроек для пользователя с схемами модели данных и ее валидации
  */
+// prettier-ignore
 class UserModelSettings<T extends IUser> implements TModelSettings<T> {
   nameModel = 'user';
 
@@ -16,20 +16,20 @@ class UserModelSettings<T extends IUser> implements TModelSettings<T> {
     create: {
       name: Joi.string()
         .min(2)
-        .rule({ message: ERROR_MESSAGES.name })
+        .rule({ message: ERROR_MESSAGES.USERNAME })
         .max(30)
-        .rule({ message: ERROR_MESSAGES.name })
+        .rule({ message: ERROR_MESSAGES.USERNAME })
         .required(),
       about: Joi.string()
         .min(2)
-        .rule({ message: ERROR_MESSAGES.about })
+        .rule({ message: ERROR_MESSAGES.ABOUT })
         .max(30)
-        .rule({ message: ERROR_MESSAGES.about })
+        .rule({ message: ERROR_MESSAGES.ABOUT })
         .required(),
       avatar: Joi.string()
         .required()
         // uri некорректно валидирует ссылку, поэтому вместо нее custom с методом из validator
-        .custom(validationURL(ERROR_MESSAGES.avatar)),
+        .custom(validationURL(ERROR_MESSAGES.AVATAR)),
     },
   };
 

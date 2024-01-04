@@ -1,4 +1,3 @@
-import { Joi } from 'celebrate';
 import { NextFunction, Request, Response } from 'express';
 import mongoose, { model, Schema } from 'mongoose';
 
@@ -20,7 +19,7 @@ export type TDecoratorMethod = (
 ) => PropertyDescriptor;
 
 export type TErrorHandler = <E extends Error>(
-  err: E & Request,
+  err: string | (E & Request),
   ...args: TControllerParameters
 ) => any;
 
@@ -42,12 +41,25 @@ export type TModelSettings<T> = {
   /** наименование модели */
   nameModel: string;
   /** схема валидации */
-  validationSchema: Record<string, Joi.PartialSchemaMap<any>>;
+  validationSchema: Record<string, any>;
   /** схема модели */
   schema: Schema<T>;
   /** модель */
   get model(): ReturnType<typeof model>;
 };
+
+// eslint-disable-next-line no-shadow
+export enum ERROR_MESSAGES {
+  AVATAR = 'Некорректный адрес ссылка для аватарки',
+  USERNAME = 'Имя должно содержать не меньше 2 символов и не больше 30',
+  ABOUT = 'Описание о себе должно содержать не меньше 2 символов и не больше 30',
+  CARD_NAME = 'Название должно содержать не меньше 2 символов и не больше 30',
+  CARD_LINK = 'Некорректный адрес ссылки для карточки',
+  INVALID_CARD = 'Некорректные данные при создании карточки',
+  DELETE_ANOTHER_CARD = 'Попытка удалить чужую карточку',
+  NOT_FOUND_CARD = 'Карточки не существует',
+  INVALID_ID_CARD = 'Некорректный идентификатор карточки',
+}
 
 /**
  * @see {@link https://ru.wikipedia.org/wiki/Список_кодов_состояния_HTTP}

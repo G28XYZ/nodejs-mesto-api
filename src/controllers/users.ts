@@ -2,9 +2,9 @@ import { STATUS_CODES } from 'http';
 
 import { HTTP_CODES, TControllerParameters } from '../utils/types';
 import User from '../models/user';
-import { catchError } from '../utils/decorators';
+import catchError from '../utils/decorators';
 
-const { NOT_FOUND_404 } = HTTP_CODES;
+const { NOT_FOUND_404, CREATED_201 } = HTTP_CODES;
 
 /** контроллер для {@link User} */
 export default class {
@@ -25,6 +25,6 @@ export default class {
   static async createUser(...[req, res]: TControllerParameters) {
     const { name, about, avatar } = req.body;
     await User.create({ name, about, avatar });
-    res.send({ name, about, avatar });
+    res.status(CREATED_201).send({ name, about, avatar });
   }
 }
